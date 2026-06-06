@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reto de Marketing: lanzamiento de EcoBottle Smart</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1f5f3;
+      color: #1f2933;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide {
+      display: none;
+      background: white;
+      border-radius: 22px;
+      padding: 40px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      min-height: 650px;
+      position: relative;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .badge {
+      background: #e6f4ea;
+      color: #137333;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin: 0 0 18px;
+      color: #123524;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin: 0 0 18px;
+      color: #123524;
+    }
+
+    h3 {
+      color: #14532d;
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 19px;
+      line-height: 1.55;
+    }
+
+    .lead {
+      font-size: 22px;
+      line-height: 1.5;
+      max-width: 850px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card {
+      background: #f8faf9;
+      border: 1px solid #d8e5dc;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .card strong {
+      color: #14532d;
+    }
+
+    .icon-card {
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+
+    .icon-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    }
+
+    .icon {
+      font-size: 46px;
+      margin-bottom: 10px;
+    }
+
+    .rules {
+      background: #eef7f0;
+      border-left: 6px solid #2e7d32;
+      padding: 20px 25px;
+      border-radius: 14px;
+      margin: 24px 0;
+    }
+
+    ul {
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 17px;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid #d6ddd8;
+      padding: 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .table th {
+      background: #e6f4ea;
+      color: #123524;
+    }
+
+    .empty {
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    .formula {
+      background: #f0fdf4;
+      border: 1px dashed #2e7d32;
+      padding: 22px;
+      border-radius: 16px;
+      font-size: 21px;
+      line-height: 1.6;
+      margin: 24px 0;
+    }
+
+    .nav {
+      margin-top: 34px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      background: #2e7d32;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #1f2933;
+    }
+
+    button.secondary:hover {
+      background: #d1d5db;
+    }
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0 0 28px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #2e7d32;
+      width: 12.5%;
+      transition: width 0.3s;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 650px;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 14px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-content h3 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .modal-content p {
+      font-size: 19px;
+    }
+
+    .close {
+      margin-top: 18px;
+    }
+
+    .teacher-note {
+      font-size: 15px;
+      color: #4b5563;
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 18px;
+    }
+
+    .final-list {
+      background: #f8faf9;
+      padding: 20px 28px;
+      border-radius: 16px;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 95px;
+      border: 1px solid #cbd5d1;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      resize: vertical;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    label {
+      font-weight: bold;
+      color: #14532d;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 850px) {
+      .slide {
+        padding: 26px;
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 27px;
+      }
+
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+
+      p,
+      ul,
+      .table {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Pantalla 1 -->
+    <section class="slide active">
+      <div class="header">
+        <span class="badge">Actividad práctica de Marketing</span>
+        <span class="badge">Reto 0/4</span>
+      </div>
+
+      <h1>Reto de Marketing: lanzamiento de EcoBottle Smart</h1>
+
+      <p class="lead">
+        Diseña una campaña de marketing para introducir en el mercado una botella reutilizable inteligente y sostenible.
+      </p>
+
+      <div class="grid grid-2" style="margin-top: 35px;">
+        <div class="card">
+          <h3>Rol del alumnado</h3>
+          <p>
+            Trabajaréis como una agencia de marketing. Vuestro objetivo será diseñar una campaña coherente para lanzar EcoBottle Smart al mercado universitario.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Resultado esperado</h3>
+          <p>
+            Cada grupo presentará una campaña breve que incluya público objetivo, buyer persona, propuesta de valor, marketing mix y mensaje principal.
+          </p>
+        </div>
+      </div>
+
+      <div class="nav">
+        <span></span>
+        <button onclick="nextSlide()">Comenzar</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 2 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Instrucciones</span>
+        <span class="badge">Reto 0/4</span>
+      </div>
+
+      <h2>Misión de la agencia</h2>
+
+      <p>
+        Sois una agencia de marketing contratada para lanzar EcoBottle Smart, una botella reutilizable dirigida a jóvenes universitarios.
+      </p>
+
+      <p>
+        Deberéis definir el público objetivo, crear un buyer persona, elaborar una propuesta de valor y diseñar el marketing mix de la campaña.
+      </p>
+
+      <div class="rules">
+        <h3>Reglas de trabajo</h3>
+        <ul>
+          <li>Grupos de 3 o 4 estudiantes.</li>
+          <li>Tiempo de trabajo: 45 minutos.</li>
+          <li>Presentación final: 5 minutos por grupo.</li>
+          <li>Producto final: una campaña breve, visual y coherente.</li>
+        </ul>
+      </div>
+
+      <div class="teacher-note">
+        Nota para el profesor: esta pantalla se utiliza para explicar la dinámica antes de comenzar el trabajo en grupo.
+      </div>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Ver producto</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Producto</span>
+        <span class="badge">Reto 0/4</span>
+      </div>
+
+      <h2>Producto: EcoBottle Smart</h2>
+
+      <p>
+        EcoBottle Smart es una botella reutilizable fabricada con materiales reciclados. Incluye un pequeño sensor que recuerda al usuario cuándo debe hidratarse y permite registrar el consumo diario de agua mediante una aplicación móvil.
+      </p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Ficha del producto</h3>
+          <p><strong>Nombre:</strong> EcoBottle Smart</p>
+          <p><strong>Categoría:</strong> producto sostenible / lifestyle / tecnología</p>
+          <p><strong>Precio orientativo:</strong> 24,90 €</p>
+          <p><strong>Público inicial:</strong> jóvenes universitarios</p>
+          <p><strong>Valor principal:</strong> sostenibilidad, salud y comodidad</p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card icon-card" onclick="openModal('Sostenibilidad', 'Fabricada con materiales reciclados y pensada para reducir el consumo de botellas de plástico.')">
+            <div class="icon">♻️</div>
+            <h3>Sostenibilidad</h3>
+          </div>
+
+          <div class="card icon-card" onclick="openModal('Tecnología', 'Incluye recordatorios de hidratación y conexión con una app móvil.')">
+            <div class="icon">📱</div>
+            <h3>Tecnología</h3>
+          </div>
+
+          <div class="card icon-card" onclick="openModal('Estilo de vida', 'Diseñada para estudiantes, deportistas y personas activas.')">
+            <div class="icon">🎒</div>
+            <h3>Estilo de vida</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Siguiente reto: público objetivo</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 4 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Segmentación</span>
+        <span class="badge">Reto 1/4</span>
+      </div>
+
+      <h2>Reto 1: define el público objetivo</h2>
+
+      <p>
+        Antes de lanzar una campaña, una marca debe decidir a quién quiere dirigirse. Definid el segmento de mercado más adecuado para EcoBottle Smart.
+      </p>
+
+      <p>
+        No sirve decir “jóvenes” o “todo el mundo”. Debéis concretar edad, estilo de vida, necesidades, hábitos de consumo y canales digitales que utiliza.
+      </p>
+
+      <button onclick="openModal('Ejemplo de público objetivo', 'Estudiantes universitarios de 18 a 25 años, preocupados por la sostenibilidad, que pasan muchas horas fuera de casa, usan Instagram y TikTok, y buscan productos útiles, estéticos y responsables.')">
+        Ver ejemplo
+      </button>
+
+      <table class="table">
+        <tr>
+          <th>Variable</th>
+          <th>Respuesta del grupo</th>
+        </tr>
+        <tr>
+          <td>Edad</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+        <tr>
+          <td>Nivel educativo</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+        <tr>
+          <td>Estilo de vida</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+        <tr>
+          <td>Necesidad principal</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+        <tr>
+          <td>Redes sociales usadas</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+        <tr>
+          <td>Motivo de compra</td>
+          <td class="empty">Escribir aquí</td>
+        </tr>
+      </table>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Continuar al buyer persona</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 5 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Cliente ideal</span>
+        <span class="badge">Reto 2/4</span>
+      </div>
+
+      <h2>Reto 2: crea el buyer persona</h2>
+
+      <p>
+        Ahora debéis transformar el público objetivo en una persona concreta. Esto os ayudará a diseñar una campaña más precisa.
+      </p>
+
+      <button onclick="openModal('Ejemplo de buyer persona', 'Laura, 21 años, estudiante de Comunicación. Pasa muchas horas en la universidad, quiere consumir de forma más sostenible y le atraen los productos prácticos con buen diseño. Compra si percibe utilidad, precio razonable y coherencia ecológica.')">
+        Ver ejemplo
+      </button>
+
+      <div class="input-grid">
+        <div>
+          <label>Nombre ficticio</label>
+          <textarea placeholder="Ejemplo: Laura"></textarea>
+        </div>
+
+        <div>
+          <label>Edad</label>
+          <textarea placeholder="Ejemplo: 21 años"></textarea>
+        </div>
+
+        <div>
+          <label>Estudios / trabajo</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Problema principal</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Motivaciones</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Frenos de compra</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Redes sociales favoritas</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Mensaje que le convencería</label>
+          <textarea></textarea>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Pasar a propuesta de valor</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 6 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Propuesta estratégica</span>
+        <span class="badge">Reto 3/4</span>
+      </div>
+
+      <h2>Reto 3: construye la propuesta de valor</h2>
+
+      <p>
+        La propuesta de valor debe explicar por qué el consumidor debería elegir EcoBottle Smart frente a otras alternativas.
+      </p>
+
+      <div class="formula">
+        <strong>Para</strong> [público objetivo]<br>
+        <strong>que necesita</strong> [necesidad principal]<br>
+        <strong>EcoBottle Smart ofrece</strong> [beneficio principal]<br>
+        <strong>porque</strong> [razón diferencial].
+      </div>
+
+      <div class="card">
+        <h3>Ejemplo</h3>
+        <p>
+          Para estudiantes universitarios que quieren hidratarse mejor y reducir el uso de plástico, EcoBottle Smart ofrece una botella reutilizable, tecnológica y sostenible, porque combina diseño, recordatorios inteligentes y materiales reciclados.
+        </p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label>Propuesta de valor del grupo</label>
+        <textarea placeholder="Redactad aquí una frase clara y convincente."></textarea>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <button onclick="openModal('Consejos', 'Una buena propuesta de valor debe ser breve, concreta y centrada en el beneficio para el cliente. No debe limitarse a describir el producto.')">
+          Consejos
+        </button>
+      </div>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Diseñar marketing mix</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 7 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Marketing mix</span>
+        <span class="badge">Reto 4/4</span>
+      </div>
+
+      <h2>Reto 4: diseña las 4P</h2>
+
+      <p>
+        Definid las decisiones principales de marketing para lanzar EcoBottle Smart.
+      </p>
+
+      <div class="grid grid-4">
+        <div class="card icon-card" onclick="openModal('Producto', '¿Qué características destacaréis? Diseño, materiales, app, durabilidad, colores, packaging o garantía.')">
+          <div class="icon">📦</div>
+          <h3>Producto</h3>
+          <p>¿Qué atributos vais a destacar?</p>
+        </div>
+
+        <div class="card icon-card" onclick="openModal('Precio', 'Decidid si usaréis una estrategia de precio económico, medio, premium, descuento de lanzamiento o pack promocional.')">
+          <div class="icon">💶</div>
+          <h3>Precio</h3>
+          <p>¿Qué precio o promoción proponéis?</p>
+        </div>
+
+        <div class="card icon-card" onclick="openModal('Distribución', 'Pensad dónde se venderá: tienda online, campus universitario, marketplaces, tiendas sostenibles o acuerdos con universidades.')">
+          <div class="icon">🛒</div>
+          <h3>Distribución</h3>
+          <p>¿Dónde podrá comprarlo el público?</p>
+        </div>
+
+        <div class="card icon-card" onclick="openModal('Comunicación', 'Elegid canales y mensajes: TikTok, Instagram, influencers, cartelería universitaria, email, evento de lanzamiento o publicidad digital.')">
+          <div class="icon">📣</div>
+          <h3>Comunicación</h3>
+          <p>¿Qué mensaje y canales utilizaréis?</p>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div>
+          <label>Producto</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Precio</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Distribución</label>
+          <textarea></textarea>
+        </div>
+
+        <div>
+          <label>Comunicación</label>
+          <textarea></textarea>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="nextSlide()">Preparar presentación</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 8 -->
+    <section class="slide">
+      <div class="header">
+        <span class="badge">Entrega final</span>
+        <span class="badge">Evaluación</span>
+      </div>
+
+      <h2>Entrega final de la agencia</h2>
+
+      <p>
+        Cada grupo presentará su campaña en 5 minutos. La exposición debe explicar las decisiones tomadas y justificar por qué son adecuadas para el público objetivo elegido.
+      </p>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>Estructura de la presentación</h3>
+          <ol class="final-list">
+            <li>Nombre de la campaña.</li>
+            <li>Público objetivo.</li>
+            <li>Buyer persona.</li>
+            <li>Propuesta de valor.</li>
+            <li>Marketing mix.</li>
+            <li>Mensaje principal de comunicación.</li>
+            <li>Justificación final.</li>
+          </ol>
+        </div>
+
+        <div>
+          <h3>Rúbrica de evaluación</h3>
+          <table class="table">
+            <tr>
+              <th>Criterio</th>
+              <th>Peso</th>
+            </tr>
+            <tr>
+              <td>Definición del público objetivo</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <td>Coherencia del buyer persona</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <td>Claridad de la propuesta de valor</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <td>Aplicación del marketing mix</td>
+              <td>25%</td>
+            </tr>
+            <tr>
+              <td>Creatividad y presentación</td>
+              <td>15%</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <p>
+        La campaña ganadora será aquella que presente mayor coherencia entre público objetivo, propuesta de valor, marketing mix y mensaje de comunicación.
+      </p>
+
+      <div class="nav">
+        <button class="secondary" onclick="prevSlide()">Volver</button>
+        <button onclick="restart()">Finalizar actividad</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+      <button class="close" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+    const progressBar = document.getElementById("progressBar");
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove("active"));
+      slides[index].classList.add("active");
+
+      const progress = ((index + 1) / slides.length) * 100;
+      progressBar.style.width = progress + "%";
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    }
+
+    function restart() {
+      currentSlide = 0;
+      showSlide(currentSlide);
+    }
+
+    function openModal(title, text) {
+      document.getElementById("modalTitle").innerText = title;
+      document.getElementById("modalText").innerText = text;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("modal");
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+  </script>
+</body>
+</html>
